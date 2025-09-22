@@ -3,6 +3,14 @@ import Chainofresponsability.Coordinador;
 import Chainofresponsability.Handler1;
 import Chainofresponsability.Profesor;
 import Command.*;
+import Iterator.Alumno;
+import Iterator.Curso;
+import Iterator.CursoIterator;
+import Mediator.ChatMediator;
+import Mediator.ChatRoom;
+import Mediator.UsuarioConcreto;
+import Memento.Examen;
+import Memento.Historial;
 
 
 public class Main {
@@ -20,7 +28,7 @@ public class Main {
 
         System.out.println("---------------** Command **--------------");
 
-       Solicitud seleccionar = new Solicitud();
+        Solicitud seleccionar = new Solicitud();
         Command inscribir = new InscribirseCursoCommand(seleccionar);
         Command baja = new AbandonarCursoCommand(seleccionar);
         Command solicitar = new SolicitarCertificadoCommand(seleccionar);
@@ -40,6 +48,49 @@ public class Main {
         elegir.pressButton(); // Realizar solicitud
         System.out.println("......Cancelar Solicitud......");
         elegir.pressUndo();// Cancelar Pedido de Certificado
+
+        System.out.println("--------------** Iterator **--------------");
+
+        Alumno alumno = new Alumno();
+        alumno.setNombreAlumno("Joaquín Martínez");
+        alumno.agregarCurso(new Curso("Diseño de Sistemas"));
+        alumno.agregarCurso(new Curso("Desarrollo de Software"));
+        alumno.agregarCurso(new Curso("Base de Datos"));
+        CursoIterator it = alumno.iterator();
+        System.out.println("Lista de Cursos para el alumno" +" " + alumno.getNombreAlumno());
+        while (it.hasNext()) {
+            System.out.println(it.next().getNombre());
+        }
+
+        System.out.println("--------------** Mediator **---------------");
+        ChatMediator sala = new ChatRoom();
+        UsuarioConcreto u1 = new UsuarioConcreto(sala, "Alumno");
+        UsuarioConcreto u2 = new UsuarioConcreto(sala, "Profesor");
+        sala.agregarUsuario(u1);
+        sala.agregarUsuario(u2);
+        u1.enviar("Buenas tardes Profesor!! Tengo una duda sobre el ejercicio de Patrones");
+        u2.enviar("Buenas tardes! ¿Cúal es tu duda?");
+        u1.enviar("Quisiera saber cúal es la fecha de entrega y el formato en que se debe entregar");
+
+        System.out.println("------------** Memento **--------------");
+
+        Examen examen = new Examen();
+        Historial historial = new Historial();
+        examen.escribir("Respuestas Examen: ");
+        historial.guardar(examen.guardar());
+        examen.escribir(" Pregunta 1: ");
+        historial.guardar(examen.guardar());
+        System.out.println("Actual: " + examen.getContenido()); // Muestra lo guardado hasta ese momento
+        examen.escribir("Un bucle debe tener break para no ser infinito");
+        historial.guardar(examen.guardar());
+        System.out.println("Actual: " + examen.getContenido());
+// Deshacer una vez
+        examen.restaurar(historial.deshacer());
+        System.out.println("Undo 1: " + examen.getContenido());
+// Deshacer otra vez
+        examen.restaurar(historial.deshacer());
+        System.out.println("Undo 2: " + examen.getContenido()); // vuelve a lo primero que se guardó
+
 
     }
 }
