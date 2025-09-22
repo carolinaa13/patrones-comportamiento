@@ -11,6 +11,8 @@ import Mediator.ChatRoom;
 import Mediator.UsuarioConcreto;
 import Memento.Examen;
 import Memento.Historial;
+import Observer.CursoObserver;
+import Observer.PantallaDisplay;
 
 
 public class Main {
@@ -91,6 +93,14 @@ public class Main {
         examen.restaurar(historial.deshacer());
         System.out.println("Undo 2: " + examen.getContenido()); // vuelve a lo primero que se guardó
 
+        System.out.println("-------------** Observer **----------------");
+        CursoObserver curso = new CursoObserver();
+        PantallaDisplay display1 = new PantallaDisplay("Display 1");
+        PantallaDisplay display2 = new PantallaDisplay("Display 2");
+        curso.addObserver(display1);
+        curso.addObserver(display2);
+        curso.setAvisos("Inscripciones Abiertas: 'Curso de Programación Avanzado'");
+        curso.setAvisos("Próximo Cierre de Inscripciones: 'Curso de Base de Datos NoSQL'");
 
     }
 }
