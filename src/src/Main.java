@@ -14,6 +14,9 @@ import Memento.Historial;
 import Observer.CursoObserver;
 import Observer.PantallaDisplay;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -101,6 +104,25 @@ public class Main {
         curso.addObserver(display2);
         curso.setAvisos("Inscripciones Abiertas: 'Curso de Programación Avanzado'");
         curso.setAvisos("Próximo Cierre de Inscripciones: 'Curso de Base de Datos NoSQL'");
+
+
+        System.out.println("-------------** Template Method **----------------");
+
+        TemplateMethod.ReporteAcademico reporteCurso = new TemplateMethod.ReporteCurso("Diseño de Sistemas", 25);
+        reporteCurso.generarReporte();
+
+        TemplateMethod.ReporteAcademico reporteAlumno = new TemplateMethod.ReporteAlumno("Joaquín Martínez", 8.75);
+        reporteAlumno.generarReporte();
+
+        System.out.println("-------------** Visitor **----------------");
+
+        Visitor.AplicarBeca aplicarBeca = new Visitor.AplicarBeca();
+
+        Visitor.Alumno alumnoRegular = new Visitor.AlumnoRegular("Carlos Pérez", 10000);
+        Visitor.Alumno alumnoBecado = new Visitor.AlumnoBecado("María López", 10000);
+
+        alumnoRegular.aceptar(aplicarBeca);
+        alumnoBecado.aceptar(aplicarBeca);
 
     }
 }
