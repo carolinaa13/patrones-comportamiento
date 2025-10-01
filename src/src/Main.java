@@ -13,7 +13,15 @@ import Memento.Examen;
 import Memento.Historial;
 import Observer.CursoObserver;
 import Observer.PantallaDisplay;
+import State.*;
+import Strategy.AlumnoStrategy;
+import Strategy.PromedioSimple;
+import Strategy.ExamenExtra;
+import Strategy.PromedioPonderado;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -102,5 +110,35 @@ public class Main {
         curso.setAvisos("Inscripciones Abiertas: 'Curso de Programación Avanzado'");
         curso.setAvisos("Próximo Cierre de Inscripciones: 'Curso de Base de Datos NoSQL'");
 
-    }
+        System.out.println("-------------** State **----------------");
+        Inscripcion inscripcion = new Inscripcion(); // Crea una nueva inscripción
+       EstadoInscripcion estado1 = new EnEspera();
+       EstadoInscripcion estado2 = new Cancelado();
+        System.out.println("................Creando Inscripción....................");
+        estado1.cambiarEstado(inscripcion);  // Cambia el estado de la Inscripción
+        System.out.println("................Autorizando Inscripción................");
+        inscripcion.cambiarEstado();
+        System.out.println("..................Alumno cancela Inscripción..................");
+        estado2.cambiarEstado(inscripcion);
+
+        System.out.println("-------------------------------** Strategy **---------------------------------");
+        System.out.println(".........................Calculando Promedio.......................");
+
+        AlumnoStrategy alumno4= new AlumnoStrategy(new PromedioSimple());
+        List<Integer> notas = new ArrayList<Integer>();
+        notas.add(7);
+        notas.add(8);
+        notas.add(9);
+        notas.add(6);
+        notas.add(7);
+        System.out.println("Promedio Simple ");
+     alumno4.Calificar(notas);// Promedio Simple
+     alumno4.setCalculo(new PromedioPonderado());
+        System.out.println("Promedio Ponderado ");
+     alumno4.Calificar(notas); // Promedio Ponderado
+     alumno4.setCalculo(new ExamenExtra());
+        System.out.println("Promedio luego de Examen Extra ");
+     alumno4.Calificar(notas); // Examen Extra
+           }
+
 }
