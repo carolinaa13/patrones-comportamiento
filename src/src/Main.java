@@ -18,6 +18,11 @@ import Strategy.AlumnoStrategy;
 import Strategy.PromedioSimple;
 import Strategy.ExamenExtra;
 import Strategy.PromedioPonderado;
+import Visitor.AlumnoBecado;
+import Visitor.AlumnoRegular;
+import Visitor.Visitor;
+import Visitor.AplicarBeca;
+import Visitor.VisitorAlumno;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +72,7 @@ public class Main {
         alumno.agregarCurso(new Curso("Desarrollo de Software"));
         alumno.agregarCurso(new Curso("Base de Datos"));
         CursoIterator it = alumno.iterator();
-        System.out.println("Lista de Cursos para el alumno" +" " + alumno.getNombreAlumno());
+        System.out.println("Lista de Cursos para el alumno" + " " + alumno.getNombreAlumno());
         while (it.hasNext()) {
             System.out.println(it.next().getNombre());
         }
@@ -112,8 +117,8 @@ public class Main {
 
         System.out.println("-------------** State **----------------");
         Inscripcion inscripcion = new Inscripcion(); // Crea una nueva inscripción
-       EstadoInscripcion estado1 = new EnEspera();
-       EstadoInscripcion estado2 = new Cancelado();
+        EstadoInscripcion estado1 = new EnEspera();
+        EstadoInscripcion estado2 = new Cancelado();
         System.out.println("................Creando Inscripción....................");
         estado1.cambiarEstado(inscripcion);  // Cambia el estado de la Inscripción
         System.out.println("................Autorizando Inscripción................");
@@ -124,7 +129,7 @@ public class Main {
         System.out.println("-------------------------------** Strategy **---------------------------------");
         System.out.println(".........................Calculando Promedio.......................");
 
-        AlumnoStrategy alumno4= new AlumnoStrategy(new PromedioSimple());
+        AlumnoStrategy alumno4 = new AlumnoStrategy(new PromedioSimple());
         List<Integer> notas = new ArrayList<Integer>();
         notas.add(7);
         notas.add(8);
@@ -132,13 +137,28 @@ public class Main {
         notas.add(6);
         notas.add(7);
         System.out.println("Promedio Simple ");
-     alumno4.Calificar(notas);// Promedio Simple
-     alumno4.setCalculo(new PromedioPonderado());
+        alumno4.Calificar(notas);// Promedio Simple
+        alumno4.setCalculo(new PromedioPonderado());
         System.out.println("Promedio Ponderado ");
-     alumno4.Calificar(notas); // Promedio Ponderado
-     alumno4.setCalculo(new ExamenExtra());
+        alumno4.Calificar(notas); // Promedio Ponderado
+        alumno4.setCalculo(new ExamenExtra());
         System.out.println("Promedio luego de Examen Extra ");
-     alumno4.Calificar(notas); // Examen Extra
-           }
+        alumno4.Calificar(notas); // Examen Extra
 
+        System.out.println("-------------** Template Method **----------------");
+
+        Template.ReporteAcademico reporteCurso = new Template.ReporteCurso("Diseño de Sistemas", 25);
+        reporteCurso.generarReporte();
+
+        Template.ReporteAcademico reporteAlumno = new Template.ReporteAlumno("Joaquín Martínez", 8.75);
+        reporteAlumno.generarReporte();
+
+        System.out.println("-------------** Visitor **----------------");
+
+        AplicarBeca aplicarBeca = new AplicarBeca();
+        VisitorAlumno alumnobecado = new AlumnoBecado("Juan López", 1000);
+        VisitorAlumno alumnoregular = new AlumnoRegular("Laura Gómez", 1000);
+        alumnobecado.aceptar(aplicarBeca);
+        alumnoregular.aceptar(aplicarBeca);
+    }
 }
